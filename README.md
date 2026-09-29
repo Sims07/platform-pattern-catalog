@@ -3,7 +3,6 @@
 > Un catalogue interactif et un outil de conception d'architecture SI basés sur la stratégie de plateforme et les concepts de **Gregor Hohpe** (*Platform Strategy: Innovation through Harmonization*, *The Software Architect Elevator*, *Cloud Strategy*).
 
 ![Platform Pattern Catalog](https://img.shields.io/badge/Architecture-Platform%20Engineering-0284c7?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-blue.style=for-the-badge)
 ![No-Build](https://img.shields.io/badge/Build-Single%20HTML%20File-10b981?style=for-the-badge)
 
 ---
