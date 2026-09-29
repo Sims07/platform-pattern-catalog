@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Platform Pattern Catalog</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0369a1',
+                            700: '#0354e6',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                            navy: '#0b172a',
+                            accent: '#38bdf8'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Smooth iOS Scrolling */
+        .custom-scrollbar {
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col font-sans antialiased bg-slate-100/90 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden transition-colors duration-200">
+
+    <!-- Header bar styled like screenshot: dark navy background -->
+    <header class="h-auto min-h-[4rem] bg-[#0b172a] border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 z-20 shrink-0 shadow-md">
+        <div class="flex items-center gap-3">
+            <div class="px-2.5 py-1 bg-sky-600 text-white text-xs font-bold rounded-lg tracking-wider uppercase shadow-sm">
+                PPC
+            </div>
+            <div>
+                <h1 class="font-bold text-base sm:text-lg text-white tracking-wide flex items-center gap-2">
+                    Platform Pattern Catalog
+                </h1>
+                <p class="text-[11px] sm:text-xs text-slate-400">Catalogue complet des patterns d'architecture SI & stratégie plateforme</p>
+            </div>
+        </div>
+
+        <!-- Desktop Navigation Tabs -->
+        <nav class="hidden lg:flex items-center gap-1 bg-slate-900/80 p-1 border border-slate-800 rounded-xl">
+            <button onclick="switchTab('catalog')" id="tab-catalog" class="tab-btn px-4 py-2 text-sm font-medium rounded-lg transition-all flex items-center gap-2 bg-sky-600 text-white shadow-md">
+                <i data-lucide="grid" class="w-4 h-4"></i> Catalogue Patterns
+            </button>
+            <button onclick="switchTab('elevator')" id="tab-elevator" class="tab-btn px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg transition-all flex items-center gap-2">
+                <i data-lucide="building-2" class="w-4 h-4"></i> Architect Elevator
+            </button>
+            <button onclick="switchTab('composer')" id="tab-composer" class="tab-btn px-4 py-2 text-sm font-medium text-slate-300 hover:text-white rounded-lg transition-all flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4"></i> Blueprint Composer
+            </button>
+        </nav>
+
+        <!-- Search & Theme Switcher -->
+        <div class="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
+            <div class="relative">
+                <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                <input type="text" id="global-search" oninput="filterPatterns()" placeholder="Rechercher un pattern, tag, concept..." 
+                    class="w-44 sm:w-64 lg:w-80 pl-9 pr-3 py-1.5 bg-slate-900/90 border border-slate-700/80 rounded-lg text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
+            </div>
+
+            <!-- Theme Switcher Button -->
+            <button onclick="toggleTheme()" id="theme-toggle-btn" class="p-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-colors" title="Basculer le thème">
+                <i data-lucide="sun" id="icon-theme-sun" class="w-4 h-4 hidden dark:block text-amber-400"></i>
+                <i data-lucide="moon" id="icon-theme-moon" class="w-4 h-4 block dark:hidden text-sky-400"></i>
+            </button>
+
+            <button onclick="openExportModal()" class="p-2 bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-colors" title="Exporter l'architecture">
+                <i data-lucide="download" class="w-4 h-4"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Navigation Switcher Bar -->
+        <div class="w-full lg:hidden flex items-center justify-between gap-1 bg-slate-900 p-1 border border-slate-800 rounded-xl overflow-x-auto">
+            <button onclick="switchTab('catalog')" id="mob-tab-catalog" class="mob-tab-btn flex-1 py-1.5 px-2 text-xs font-medium rounded-lg transition-all flex items-center justify-center gap-1.5 bg-sky-600 text-white whitespace-nowrap">
+                <i data-lucide="grid" class="w-3.5 h-3.5"></i> Patterns
+            </button>
+            <button onclick="switchTab('elevator')" id="mob-tab-elevator" class="mob-tab-btn flex-1 py-1.5 px-2 text-xs font-medium text-slate-300 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap">
+                <i data-lucide="building-2" class="w-3.5 h-3.5"></i> Elevator
+            </button>
+            <button onclick="switchTab('composer')" id="mob-tab-composer" class="mob-tab-btn flex-1 py-1.5 px-2 text-xs font-medium text-slate-300 rounded-lg transition-all flex items-center justify-center gap-1.5 whitespace-nowrap">
+                <i data-lucide="cpu" class="w-3.5 h-3.5"></i> Composer
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-hidden relative flex flex-col">
+        <!-- VIEW 1: PATTERN CATALOG -->
+        <div id="view-catalog" class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar flex flex-col gap-5">
+            <!-- Filter Pills Bar matching screenshot style -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white/70 dark:bg-slate-900/60 p-2 sm:p-2.5 rounded-full border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur">
+                <div id="category-filters" class="flex flex-wrap items-center gap-1.5">
+                    <!-- Dynamic category pills -->
+                </div>
+                <span id="pattern-count" class="text-xs font-mono text-slate-500 dark:text-slate-400 pr-3">
+                    -- pattern(s)
+                </span>
+            </div>
+
+            <!-- Pattern Grid -->
+            <div id="patterns-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Cards rendered dynamically -->
+            </div>
+        </div>
+
+        <!-- VIEW 2: ARCHITECT ELEVATOR -->
+        <div id="view-elevator" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar flex-col gap-6">
+            <div class="bg-gradient-to-r from-sky-500/10 via-slate-500/5 to-transparent p-4 sm:p-5 rounded-2xl border border-sky-500/20">
+                <h2 class="font-bold text-base sm:text-lg text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <i data-lucide="building-2" class="w-5 h-5 text-sky-500"></i> The Software Architect Elevator
+                </h2>
+                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1">
+                    Selon Gregor Hohpe, la valeur de l'architecte réside dans sa capacité à faire la navette entre la stratégie d'entreprise (Penthouse) et la réalité technologique (Sous-sol).
+                </p>
+            </div>
+
+            <div class="relative pl-6 sm:pl-8 border-l-2 border-sky-500/30 space-y-6 my-2" id="elevator-floors">
+                <!-- Floors rendered dynamically -->
+            </div>
+        </div>
+
+        <!-- VIEW 3: COMPOSER -->
+        <div id="view-composer" class="hidden flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar flex-col lg:flex-row gap-6">
+            <!-- Left Panel: Toolbox -->
+            <div class="w-full lg:w-80 shrink-0 flex flex-col gap-3">
+                <div class="bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                    <h3 class="font-bold text-sm text-slate-900 dark:text-slate-100 mb-1 flex items-center gap-2">
+                        <i data-lucide="box" class="w-4 h-4 text-sky-500"></i> Boîte à Outils Patterns
+                    </h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Cliquez sur '+' pour ajouter un pattern au blueprint d'architecture.</p>
+                    
+                    <div id="composer-toolbox" class="space-y-2 max-h-[60vh] overflow-y-auto custom-scrollbar pr-1">
+                        <!-- Items rendered dynamically -->
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button onclick="clearBlueprint()" class="flex-1 py-2 px-3 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/20 rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1.5">
+                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Réinitialiser
+                    </button>
+                    <button onclick="exportBlueprintMarkdown()" class="flex-1 py-2 px-3 bg-sky-600 hover:bg-sky-500 text-white rounded-xl text-xs font-medium transition-colors flex items-center justify-center gap-1.5 shadow-sm">
+                        <i data-lucide="download" class="w-3.5 h-3.5"></i> Exporter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Panel: Layers Stack -->
+            <div class="flex-1 flex flex-col gap-4">
+                <div id="blueprint-layers" class="space-y-4">
+                    <!-- Layer zones rendered dynamically -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="pattern-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6 transition-opacity">
+        <div class="w-full max-w-2xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200">
+            <!-- Modal Header -->
+            <div class="p-4 sm:p-6 border-b border-slate-200 dark:border-slate-800 flex items-start justify-between bg-slate-50/80 dark:bg-slate-950/50">
+                <div>
+                    <div class="flex items-center gap-2 mb-2" id="modal-badges"></div>
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-900 dark:text-slate-100" id="modal-title">Pattern Title</h2>
+                    <p class="text-xs text-sky-600 dark:text-sky-400 mt-0.5 font-mono" id="modal-subtitle">Sub-title / Alternate Name</p>
+                </div>
+                <button onclick="closePatternModal()" class="p-2 hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 rounded-lg transition-colors shrink-0">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 custom-scrollbar" id="modal-body">
+                <!-- Hohpe Quote Card -->
+                <div class="bg-gradient-to-r from-sky-50 to-white dark:from-sky-950/60 dark:to-slate-900 border-l-4 border-sky-500 p-3.5 rounded-r-lg border-y border-r border-slate-200 dark:border-y-0 dark:border-r-0">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="quote" class="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5"></i>
+                        <div>
+                            <p class="text-xs sm:text-sm italic text-slate-700 dark:text-slate-200 leading-relaxed" id="modal-hohpe-quote">"Quote content..."</p>
+                            <span class="text-xs font-semibold text-sky-600 dark:text-sky-400 mt-2 block" id="modal-hohpe-source">— Greg Hohpe</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1. SECTION PROBLÈMES -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400 mb-1.5 flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500"></i> Problèmes & Enjeux
+                    </h4>
+                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-rose-500/5 dark:bg-rose-950/20 p-3.5 rounded-xl border border-rose-500/20" id="modal-problem"></p>
+                </div>
+
+                <!-- 2. SECTION SOLUTION -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 mb-1.5 flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-500"></i> Solution de Plateforme
+                    </h4>
+                    <p class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-emerald-500/5 dark:bg-emerald-950/20 p-3.5 rounded-xl border border-emerald-500/20" id="modal-solution"></p>
+                </div>
+
+                <!-- 3. SECTION EFFETS NÉGATIFS & RISQUES -->
+                <div>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1.5 flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-500"></i> Effets Négatifs, Compromis & Risques
+                    </h4>
+                    <ul class="text-xs sm:text-sm text-slate-700 dark:text-slate-300 space-y-1.5 bg-amber-500/5 dark:bg-amber-950/20 p-3.5 rounded-xl border border-amber-500/20 list-disc list-inside" id="modal-negative-effects"></ul>
+                </div>
+
+                <!-- Diagram / Visual Schema -->
+                <div>
+                    <h4 class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5 flex items-center gap-2">
+                        <i data-lucide="network" class="w-4 h-4 text-sky-500"></i> Représentation Fonctionnelle
+                    </h4>
+                    <div class="bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center justify-center min-h-[140px] overflow-hidden" id="modal-diagram">
+                        <!-- SVG Schema -->
+                    </div>
+                </div>
+
+                <!-- Strategic Impact & Pros -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div class="bg-sky-500/10 border border-sky-500/20 p-3.5 rounded-xl">
+                        <h5 class="text-xs font-bold text-sky-700 dark:text-sky-400 mb-1.5 flex items-center gap-1.5">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5"></i> Impacts Stratégiques
+                        </h5>
+                        <ul class="text-xs text-slate-700 dark:text-slate-300 space-y-1" id="modal-impact"></ul>
+                    </div>
+                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-3.5 rounded-xl">
+                        <h5 class="text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-1.5 flex items-center gap-1.5">
+                            <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i> Avantages Principaux
+                        </h5>
+                        <ul class="text-xs text-slate-700 dark:text-slate-300 space-y-1 list-disc list-inside" id="modal-pros"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3.5 sm:p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950/80 flex items-center justify-between shrink-0 gap-2">
+                <button onclick="addCurrentPatternToBlueprint()" class="px-3.5 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5">
+                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Ajouter au Blueprint
+                </button>
+                <button onclick="closePatternModal()" class="px-3.5 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-slate-300 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-xs sm:text-sm font-medium transition-colors">
+                    Fermer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="export-modal" class="fixed inset-0 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative">
+            <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
+                <h3 class="font-bold text-lg text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                    <i data-lucide="file-code" class="w-5 h-5 text-sky-600 dark:text-sky-400"></i>
+                    Exportation du Canvas Architecture
+                </h3>
+                <button onclick="closeExportModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3">Copiez la synthèse au format Markdown pour intégrer dans vos documents d'architecture (DAT, ADR) :</p>
+            <textarea id="export-text" readonly class="w-full h-64 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-3 text-xs font-mono text-sky-800 dark:text-sky-300 custom-scrollbar focus:outline-none"></textarea>
+            <div class="mt-4 flex justify-end gap-3">
+                <button onclick="copyExportToClipboard()" class="px-4 py-2 bg-sky-600 hover:bg-sky-500 text-white rounded-lg text-xs font-medium transition-colors flex items-center gap-1.5">
+                    <i data-lucide="copy" class="w-4 h-4"></i> Copier dans le presse-papier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* PATTERNS DATASET */
+        const PATTERNS_DATA = [
+            {
+                id: "fruit-salad-vs-basket",
+                title: "Salade de Fruits vs Panier de Fruits",
+                subtitle: "Fruit Salad or Fruit Basket?",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy: Innovation through Harmonization",
+                elevatorFloor: "Penthouse <-> Étage Technique",
+                complexity: "Intermédiaire",
+                icon: "layers",
+                summary: "Une plateforme performante est une 'salade de fruits' où les composants s'associent et partagent un contexte commun, non un simple 'panier' d'outils juxtaposés.",
+                hohpeQuote: "Un ensemble d'outils autonomes est un panier de fruits : pratique mais sans synergie. Une vraie plateforme est une salade de fruits : les composants s'harmonisent, partagent du contexte, de l'identité et du design pour offrir une valeur démultipliée.",
+                problem: "Mettre à disposition des développeurs une juxtaposition de 15 outils autonomes (K8s, Argo, Vault, Backstage, Sonar) sans intégration transversale. Cela force chaque équipe produit à réinventer la glue technique, ce qui augmente la charge cognitive et crée du Shadow IT.",
+                solution: "Concevoir une plateforme harmonisée avec une identité unique (SSO/IAM), une couche de contexte partagée, un design unifié et des API cohérentes qui associent les briques pour créer une expérience fluide.",
+                impacts: [
+                    "Réduction de l'effort d'intégration chez les utilisateurs de la plateforme.",
+                    "Expérience développeur (DX) homogène et fluide.",
+                    "Création d'un effet de réseau interne autour de la plateforme."
+                ],
+                pros: ["Synergie forte entre outils", "Ergonomie unifiée", "Adoption accélérée"],
+                cons: [
+                    "Effort d'ingénierie d'intégration initial important pour l'équipe plateforme.",
+                    "Exige une gouvernance produit stricte pour maintenir l'alignement entre briques.",
+                    "Risque de couplage excessif si les modules ne restent pas indépendamment remplaçables."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="20" y="20" width="160" height="80" rx="8" fill="#0f172a" stroke="#475569" stroke-dasharray="3"/>
+                    <text x="100" y="40" font-size="10" font-weight="bold" fill="#94a3b8" text-anchor="middle">Fruit Basket (Outils Isolés)</text>
+                    <rect x="35" y="55" width="35" height="30" rx="4" fill="#0284c7"/><rect x="82" y="55" width="35" height="30" rx="4" fill="#d97706"/><rect x="130" y="55" width="35" height="30" rx="4" fill="#059669"/>
+                    <rect x="220" y="20" width="160" height="80" rx="8" fill="#0369a1" fill-opacity="0.3" stroke="#38bdf8"/>
+                    <text x="300" y="40" font-size="10" font-weight="bold" fill="#38bdf8" text-anchor="middle">Fruit Salad (Platform System)</text>
+                    <rect x="235" y="52" width="130" height="38" rx="6" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="300" y="75" font-size="10" fill="#fff" text-anchor="middle">Harmonized Core Platform</text>
+                </svg>`
+            },
+            {
+                id: "platform-paradox",
+                title: "Le Paradoxe de la Plateforme",
+                subtitle: "The Platform Paradox",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy: Innovation through Harmonization",
+                elevatorFloor: "Penthouse / Strategy",
+                complexity: "Avancé",
+                icon: "zap",
+                summary: "Harmoniser et contraindre le choix sur le non-différenciant libère la capacité d'innover sur le métier.",
+                hohpeQuote: "Le paradoxe de la plateforme réside dans le fait qu'en réduisant la liberté de choix technologique sur le socle commun, vous accélérez radicalement l'innovation sur les produits métier.",
+                problem: "Accorder une autonomie totale sur le choix des technologies (frameworks, bases de données, pipelines CI/CD) conduit à une dette technique ingérable, un gâchis de ressources et une incapacité à maintenir le SI à l'échelle.",
+                solution: "Imposer des standards stricts sur les couches non-différenciantes (CI/CD, Identité, Observabilité, Runtime) afin de concentrer 100% de la créativité et du temps des développeurs sur la valeur produit.",
+                impacts: [
+                    "Élimination des réinventions de roue inutiles.",
+                    "Concentration des équipes sur les fonctionnalités différenciantes.",
+                    "Mobilité accrue des ingénieurs entre produits."
+                ],
+                pros: ["Efficacité opérationnelle maximale", "Focus sur le business", "Scalabilité organisationnelle"],
+                cons: [
+                    "Résistance culturelle initiale des équipes prônant une liberté technologique totale.",
+                    "Risque de verrouillage sur des choix de socle obsolètes si la plateforme ne se régénère pas.",
+                    "Incapacité à traiter rapidement des besoins marginaux hors-standard."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="70" width="340" height="35" rx="5" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="200" y="92" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">Standardized Baseline (Harmonization)</text>
+                    <path d="M70 65 L70 25" stroke="#f59e0b" stroke-width="3"/>
+                    <path d="M200 65 L200 25" stroke="#10b981" stroke-width="3"/>
+                    <path d="M330 65 L330 25" stroke="#38bdf8" stroke-width="3"/>
+                    <text x="200" y="18" font-size="11" font-weight="bold" fill="#f59e0b" text-anchor="middle">High Velocity Business Innovation</text>
+                </svg>`
+            },
+            {
+                id: "abstractions-not-illusions",
+                title: "Abstractions, Pas des Illusions",
+                subtitle: "Build Abstractions Not Illusions",
+                category: "Platform Engineering",
+                hohpeSource: "Platform Strategy / Cloud Strategy",
+                elevatorFloor: "Étage Technique & Ops",
+                complexity: "Avancé",
+                icon: "sparkles",
+                summary: "Simplifier l'utilisation des infrastructures sans masquer la réalité des pannes réseau ou distribuées.",
+                hohpeQuote: "Une bonne abstraction simplifie la complexité pour l'utilisateur. Une illusion prétend que la complexité n'existe pas — jusqu'au jour où elle casse et laisse le développeur démuni.",
+                problem: "Créer des interfaces 'magiques' ou '100% no-code' qui masquent totalement les concepts distribués (réseau, coût, latence, pannes). Dès lors qu'un incident survient, les équipes applicatives sont totalement incapables d'investiguer.",
+                solution: "Fournir des abstractions claires qui simplifient le travail récurrent tout en gardant transparents la télémétrie, la gestion des erreurs, les limites de sous-capacité et le comportement distribué sous-jacent.",
+                impacts: [
+                    "Capacité de diagnostic rapide en cas d'incident.",
+                    "Responsabilisation des équipes sur la résilience applicative.",
+                    "Compréhension fine des coûts d'infrastructure."
+                ],
+                pros: ["Comportement prévisible", "Débogage facilité", "Robustesse en production"],
+                cons: [
+                    "Courbe d'apprentissage plus exigeante pour les développeurs juniors.",
+                    "Impossibilité d'offrir une expérience 'zéro-connaissance' de l'infrastructure.",
+                    "Effort de design continu pour placer le bon niveau de curseur d'abstraction."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="20" width="150" height="80" rx="6" fill="#881337" stroke="#f43f5e"/>
+                    <text x="105" y="45" font-size="10" font-weight="bold" fill="#fecdd3" text-anchor="middle">Illusion (Magic Box)</text>
+                    <text x="105" y="70" font-size="9" fill="#fda4af" text-anchor="middle">Fails blindly under pressure</text>
+                    <rect x="220" y="20" width="150" height="80" rx="6" fill="#065f46" stroke="#10b981"/>
+                    <text x="295" y="45" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">Abstraction (Transparent)</text>
+                    <text x="295" y="70" font-size="9" fill="#6ee7b7" text-anchor="middle">Transparent metrics & errors</text>
+                </svg>`
+            },
+            {
+                id: "grim-wrapper",
+                title: "Méfiez-vous de l'Enrobeur Funeste",
+                subtitle: "Beware the Grim Wrapper",
+                category: "Architecture & Integration",
+                hohpeSource: "Platform Strategy: Innovation through Harmonization",
+                elevatorFloor: "Étage Modernisation SI",
+                complexity: "Intermédiaire",
+                icon: "package-x",
+                summary: "Enrober un système legacy bancal avec une API REST moderne crée une illusion trompeuse de modernisation.",
+                hohpeQuote: "Créer une API REST élégante au-dessus d'un monolithe obsolète et instable ne fait que masquer le problème. Dès que le trafic augmente, l'illusion s'effondre.",
+                problem: "Entourer un vieux monolithe fragile d'une couche d'API moderne (Swagger/OpenAPI) pour donner une impression de modernisation, sans traiter les problèmes de scalabilité, de couplage et de lenteur du backend.",
+                solution: "Ne pas se limiter à l'enrobage : associer la façade d'API à un motif de Figuier Étrangleur (Strangler Fig), du caching distribué, de l'isolation de charge (Circuit Breaker) et un plan de décommissionnement progressif du cœur legacy.",
+                impacts: [
+                    "Évite les fausses promesses de performance aux consommateurs.",
+                    "Protection effective des systèmes centraux du SI.",
+                    "Véritable plan de transformation dans la durée."
+                ],
+                pros: ["Prise de conscience de la dette", "Protection contre la surcharge"],
+                cons: [
+                    "Ne résout pas la dette technique sous-jacente sans budget de refonte.",
+                    "Risque d'endormir la gouvernance grâce à la 'façade propre'.",
+                    "Coût cumulé de la couche d'enrobage et du backend bancal."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="30" width="120" height="60" rx="6" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="90" y="55" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">Modern REST Facade</text>
+                    <path d="M150 60 L230 60" stroke="#f43f5e" stroke-width="3" stroke-dasharray="3"/>
+                    <rect x="230" y="20" width="140" height="80" rx="6" fill="#450a0a" stroke="#f43f5e"/>
+                    <text x="300" y="50" font-size="10" font-weight="bold" fill="#fecdd3" text-anchor="middle">Brittle Legacy Monolith</text>
+                </svg>`
+            },
+            {
+                id: "mechanisms-not-magic",
+                title: "Des Mécanismes, Pas de la Magie",
+                subtitle: "Mechanisms Not Magic",
+                category: "Gouvernance & Compliance",
+                hohpeSource: "Platform Strategy / Software Architect Elevator",
+                elevatorFloor: "Gouvernance & Compliance",
+                complexity: "Intermédiaire",
+                icon: "cog",
+                summary: "Privilégier des mécanismes déclaratifs et explicitement audités plutôt que des scripts 'magiques' et opaques.",
+                hohpeQuote: "L'automatisation de plateforme ne doit pas reposer sur de la magie noire. Des mécanismes explicites, déclaratifs et auditables sont la clé d'un SI durable.",
+                problem: "Reposer l'automatisation sur des scripts Bash complexes, des wizards opaques ou des macros magiques. Lors des pannes, personne ne comprend les étapes d'exécution et le système devient irréparable.",
+                solution: "Privilégier des modèles déclaratifs (Kubernetes CRDs, Terraform, GitOps) où l'état désiré est explicite, contrôlé par un réconciliateur et versionné sous forme de code auditables dans Git.",
+                impacts: [
+                    "Traçabilité complète des modifications d'infrastructure.",
+                    "Compréhension claire des flux par les développeurs et SRE.",
+                    "Sérénité lors des opérations de production."
+                ],
+                pros: ["Auditabilité totale", "Reproductibilité", "Simplicité de maintenance"],
+                cons: [
+                    "Verbosité accrue des déclarations de configuration.",
+                    "Nécessite d'assimiler la boucle de réconciliation et le modèle déclaratif.",
+                    "Gestion plus complexe des états de transition non prévus."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="40" width="100" height="40" rx="6" fill="#0369a1"/>
+                    <text x="80" y="63" font-size="10" fill="#fff" text-anchor="middle">Git / State Desired</text>
+                    <path d="M130 60 L200 60" stroke="#38bdf8" stroke-width="2"/>
+                    <circle cx="230" cy="60" r="25" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="230" y="64" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Reconciler</text>
+                    <path d="M255 60 L320 60" stroke="#10b981" stroke-width="2"/>
+                    <rect x="320" y="40" width="60" height="40" rx="6" fill="#059669"/>
+                    <text x="350" y="63" font-size="10" fill="#fff" text-anchor="middle">Actual State</text>
+                </svg>`
+            },
+            {
+                id: "platform-float-or-sink",
+                title: "Plateforme Flottante vs Coulante",
+                subtitle: "Will Your Platform Float or Sink?",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy: Innovation through Harmonization",
+                elevatorFloor: "Penthouse / Strategy",
+                complexity: "Avancé",
+                icon: "anchor",
+                summary: "S'assurer que le gain de vélocité apporté par la plateforme surpasse en permanence son poids d'entretien et de surcharge.",
+                hohpeQuote: "Une plateforme doit apporter un gain de vitesse supérieur à son propre poids d'entretien. Si le coût d'exploitation dépasse la valeur créée, la plateforme coule sous son propre poids.",
+                problem: "Construire des cathédrales techniques (Thick Platform) qui exigent 25 ingénieurs plateforme dédiés pour maintenir des composants complexes qui n'accélèrent finalement que 30 développeurs.",
+                solution: "Viser la taille minimale efficace (Thin Platform), consommer un maximum de services managés cloud et mesurer systématiquement le ratio de flottabilité : Valeur Métier produite vs Charge d'entretien.",
+                impacts: [
+                    "Maintien d'un ROI positif permanent pour les investissements IT.",
+                    "Élimination des fonctionnalités plateforme sur-ingéniérées.",
+                    "Légèreté et agilité de l'équipe de plateforme."
+                ],
+                pros: ["Viabilité économique", "Effondrement des coûts inutiles"],
+                cons: [
+                    "Arbitrages douloureux imposant de refuser certaines demandes spécifiques.",
+                    "Dépendance accrue envers les fournisseurs Cloud pour le socle d'infrastructure.",
+                    "Pression continue sur la mesure de la valeur produite."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <path d="M20 70 C 100 60, 200 80, 380 70" stroke="#0284c7" stroke-width="4"/>
+                    <rect x="120" y="25" width="160" height="45" rx="6" fill="#0369a1" stroke="#38bdf8"/>
+                    <text x="200" y="45" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">Platform Core Value</text>
+                    <text x="200" y="60" font-size="8" fill="#7dd3fc" text-anchor="middle">Net Positive Buoyancy</text>
+                </svg>`
+            },
+            {
+                id: "platform-sandwich",
+                title: "Le Sandwich de Plateforme",
+                subtitle: "The Platform Sandwich",
+                category: "Platform Strategy",
+                hohpeSource: "Cloud Strategy / Software Architect Elevator",
+                elevatorFloor: "Penthouse <-> Sous-sol",
+                complexity: "Avancé",
+                icon: "layers",
+                summary: "Standardiser l'infrastructure bas niveau tout en offrant des abstractions de haut niveau pour libérer la productivité métier.",
+                hohpeQuote: "Une plateforme efficace prend en sandwich la complexité : elle masque l'infrastructure sous-jacente rigide et expose des primitives simples et autonomes aux développeurs.",
+                problem: "Les équipes applicatives passent la moitié de leur temps à configurer le stockage, les réseaux et le packaging d'infrastructure au lieu d'écrire des règles métier.",
+                solution: "Isoler la complexité en sandwich : un plan de contrôle inférieur qui gère le cloud/IaaS et un plan d'expérience supérieur (IDP) offrant des abstractions déclaratives simples.",
+                impacts: [
+                    "Réduction drastique de la charge cognitive des équipes applicatives.",
+                    "Time-to-market accéléré.",
+                    "Gouvernance centralisée sans blocage manuel."
+                ],
+                pros: ["Productivité accrue", "Sécurité intégrée par défaut", "Composabilité"],
+                cons: [
+                    "Crée une couche d'abstraction supplémentaire qui doit rester à jour.",
+                    "Risque d'effet de goulot d'étranglement si l'équipe IDP est sous-dimensionnée.",
+                    "Compréhension réduite de l'infrastructure bas-niveau par les développeurs."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="20" y="10" width="360" height="25" rx="5" fill="#0369a1" fill-opacity="0.3" stroke="#0284c7" stroke-dasharray="4"/>
+                    <text x="200" y="27" font-size="11" fill="#7dd3fc" text-anchor="middle">Business Applications / Microservices</text>
+                    <rect x="20" y="45" width="360" height="30" rx="5" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="200" y="64" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">Internal Developer Platform (IDP)</text>
+                    <rect x="20" y="85" width="360" height="25" rx="5" fill="#1e293b" stroke="#475569"/>
+                    <text x="200" y="102" font-size="11" fill="#94a3b8" text-anchor="middle">Raw Cloud Infrastructure</text>
+                </svg>`
+            },
+            {
+                id: "platform-as-product",
+                title: "Platform as a Product",
+                subtitle: "La Plateforme comme Produit Interne",
+                category: "Platform Strategy",
+                hohpeSource: "The Software Architect Elevator",
+                elevatorFloor: "Penthouse / Org Strategy",
+                complexity: "Intermédiaire",
+                icon: "box",
+                summary: "Traiter la plateforme interne non pas comme un projet IT rigide, mais comme un produit adopté sur la base du volontariat.",
+                hohpeQuote: "Si vous devez forcer les développeurs à utiliser votre plateforme, c'est que votre plateforme n'est pas assez bonne.",
+                problem: "Les plateformes imposées par décret d'architecture génèrent du ressentiment, des contournements (Shadow IT) et une inadéquation par rapport aux besoins quotidiens des développeurs.",
+                solution: "Affecter un Product Manager à la plateforme, construire selon les retours utilisateurs (NPS/DX), et faire reposer l'adoption sur l'attractivité et la valeur perçue plutôt que sur la contrainte.",
+                impacts: [
+                    "Alignement continu entre besoins dev et capacités plateforme.",
+                    "Adoption naturelle basée sur l'attractivité.",
+                    "Réduction des frictions d'organisation."
+                ],
+                pros: ["Satisfaction développeur élevée", "Évolution pragmatique", "Moins de Shadow IT"],
+                cons: [
+                    "Nécessite un investissement continu en gestion de produit et marketing interne.",
+                    "Demande du temps pour convaincre plutôt qu'imposer.",
+                    "Risque de devoir supporter temporairement des architectures divergentes."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <circle cx="100" cy="60" r="35" fill="#0369a1" fill-opacity="0.2" stroke="#38bdf8"/>
+                    <text x="100" y="64" font-size="11" fill="#e0effe" text-anchor="middle">Platform Team</text>
+                    <path d="M140 60 L240 60" stroke="#38bdf8" stroke-width="2"/>
+                    <circle cx="280" cy="60" r="35" fill="#0284c7" fill-opacity="0.4" stroke="#0284c7"/>
+                    <text x="280" y="64" font-size="11" fill="#ffffff" text-anchor="middle">Dev Squads</text>
+                </svg>`
+            },
+            {
+                id: "golden-path",
+                title: "La Voie Dorée (Golden Path)",
+                subtitle: "Standards sans Rigidité",
+                category: "Platform Engineering",
+                hohpeSource: "Cloud Strategy",
+                elevatorFloor: "Étage Technique & Ops",
+                complexity: "Débutant",
+                icon: "compass",
+                summary: "Offrir un chemin auto-service pré-configuré ultra-rapide pour 80% des besoins, tout en tolérant l'écart managé pour les 20% restants.",
+                hohpeQuote: "Offrez des autoroutes lisses et balisées. Si une équipe veut aller dans la jungle, elle peut le faire, mais elle devra tailler son propre chemin.",
+                problem: "Soit l'IT verrouille l'environnement et bloque toute initiative hors-cadre, soit chaque équipe part dans une direction différente en créant un labyrinthe technique intenable.",
+                solution: "Concevoir des modèles Self-service clé en main ('Golden Paths') pour 80% des cas d'usage courants. Les équipes qui l'utilisent bénéficient d'un support automatisé et d'un déploiement en 1-clic.",
+                impacts: [
+                    "Démarrage accéléré des nouveaux projets.",
+                    "Sécurité et conformité 'by-design'.",
+                    "Maintien de l'autonomie des équipes expertes."
+                ],
+                pros: ["Standardisation douce", "Accélération du Time-to-Hello-World", "Sécurité native"],
+                cons: [
+                    "Coût de maintenance élevé pour garder les 'Golden Paths' à jour.",
+                    "Risque de surestimations des besoins hors-sentier si la Voie Dorée devient trop rigide.",
+                    "Tentation pour l'équipe plateforme de négliger le support des cas particuliers."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <path d="M30 60 Q200 10 370 60" stroke="#f59e0b" stroke-width="6" fill="none"/>
+                    <text x="200" y="30" font-size="11" font-weight="bold" fill="#fbbf24" text-anchor="middle">Golden Path (1-Click Deploy)</text>
+                    <circle cx="50" cy="60" r="8" fill="#38bdf8"/>
+                    <circle cx="350" cy="60" r="8" fill="#10b981"/>
+                </svg>`
+            },
+            {
+                id: "smart-endpoints-dumb-pipes",
+                title: "Endpoints Intelligents, Tuyaux Muets",
+                subtitle: "Smart Endpoints, Dumb Pipes",
+                category: "Architecture & Integration",
+                hohpeSource: "Enterprise Integration Patterns",
+                elevatorFloor: "Étage Integration / Microservices",
+                complexity: "Intermédiaire",
+                icon: "network",
+                summary: "Placer la logique métier dans les services applicatifs et conserver une infrastructure de transport légère et décoordonnée.",
+                hohpeQuote: "Évitez de transformer votre middleware d'intégration en un monolithe caché rempli de règles métier orchestrées.",
+                problem: "Concentrer la logique métier, les transformations complexes et les orchestrations au cœur d'un ESB monolithique, transformant le bus d'intégration en goulot d'étranglement instable.",
+                solution: "Placer la logique métier et le traitement directement au sein des microservices (Smart Endpoints) et utiliser un courtier d'événements simple et rapide (Dumb Pipe comme Kafka ou RabbitMQ).",
+                impacts: [
+                    "Découplage fort entre composants du système d'information.",
+                    "Évolutivité horizontale de la plateforme.",
+                    "Facilité de test unitaire et d'intégration."
+                ],
+                pros: ["Résilience accrue", "Pas de verrouillage éditeur ESB", "Déploiements indépendants"],
+                cons: [
+                    "Duplication potentielle de code de validation entre microservices.",
+                    "Complexité accrue pour superviser les flux métier de bout en bout.",
+                    "Nécessite une maturité poussée en gestion d'événements et d'idempotence."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="40" width="80" height="40" rx="6" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="70" y="63" font-size="10" fill="#ffffff" text-anchor="middle">Smart Service A</text>
+                    <rect x="290" y="40" width="80" height="40" rx="6" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="330" y="63" font-size="10" fill="#ffffff" text-anchor="middle">Smart Service B</text>
+                    <line x1="110" y1="60" x2="290" y2="60" stroke="#475569" stroke-width="4"/>
+                    <text x="200" y="52" font-size="10" fill="#94a3b8" text-anchor="middle">Dumb Pipe (Event Stream)</text>
+                </svg>`
+            },
+            {
+                id: "strangler-fig",
+                title: "Figuier Étrangleur (Strangler Fig)",
+                subtitle: "Migration Progressive du Legacy",
+                category: "Architecture & Integration",
+                hohpeSource: "The Software Architect Elevator",
+                elevatorFloor: "Étage Modernisation SI",
+                complexity: "Intermédiaire",
+                icon: "git-fork",
+                summary: "Remplacer progressivement des pans d'un système patrimonial monolithique par des services modernes de plateforme.",
+                hohpeQuote: "N'essayez jamais de remplacer un système majeur par un 'Big Bang'. Interceptez les appels à la frontière et intercalez la nouvelle plateforme.",
+                problem: "Les projets de refonte globale par 'Big Bang' échouent dans la majorité des cas en raison de l'effet 'cible mouvante', des délais à rallonge et du risque opérationnel massif.",
+                solution: "Positionner un routeur/proxy (API Gateway) devant le legacy pour intercepter les flux, puis migrer et remplacer les fonctionnalités une par une par des services plateforme jusqu'à extinction du monolithe.",
+                impacts: [
+                    "Livraison continue de valeur sans interruption d'activité.",
+                    "Réduction drastique des risques d'échec.",
+                    "Décommissionnement progressif du legacy."
+                ],
+                pros: ["Retour sur investissement rapide", "Risque maîtrisé", "Apprentissage continu"],
+                cons: [
+                    "Surcoût opérationnel temporaire lié au maintien simultané des deux systèmes.",
+                    "Complexité de synchronisation des données entre l'ancien et le nouveau monde.",
+                    "Durée globale de transition potentiellement longue."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="20" y="45" width="70" height="30" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+                    <text x="55" y="63" font-size="10" fill="#fff" text-anchor="middle">Router / Proxy</text>
+                    <path d="M90 50 L180 25" stroke="#f43f5e" stroke-width="2"/>
+                    <rect x="180" y="10" width="120" height="30" rx="4" fill="#881337" stroke="#f43f5e"/>
+                    <text x="240" y="28" font-size="10" fill="#fecdd3" text-anchor="middle">Monolithe Legacy</text>
+                    <path d="M90 70 L180 95" stroke="#10b981" stroke-width="2" stroke-dasharray="3"/>
+                    <rect x="180" y="80" width="120" height="30" rx="4" fill="#065f46" stroke="#10b981"/>
+                    <text x="240" y="98" font-size="10" fill="#a7f3d0" text-anchor="middle">Services Plateforme</text>
+                </svg>`
+            },
+            {
+                id: "governance-as-code",
+                title: "Gouvernance par le Code (Policy as Code)",
+                subtitle: "Automated Guardrails",
+                category: "Gouvernance & Compliance",
+                hohpeSource: "Cloud Strategy",
+                elevatorFloor: "Gouvernance & Compliance",
+                complexity: "Avancé",
+                icon: "shield-check",
+                summary: "Remplacer les comités d'architecture manuels par des garde-fous automatisés directement intégrés dans les pipelines CI/CD.",
+                hohpeQuote: "La gouvernance ne doit pas être un péage routier qui ralentit le trafic, mais un garde-fou sur une autoroute qui vous empêche de tomber de la falaise.",
+                problem: "Les processus de validation manuels (comités CAB, revues de sécurité sur papier) créent des goulots d'étranglement de plusieurs semaines et échouent à détecter les erreurs de configuration réelles à l'échelle.",
+                solution: "Exprimer les règles de sécurité, de conformité réglementaire et de coûts sous forme de règles de code (OPA, Checkov) exécutées automatiquement à chaque 'git push'.",
+                impacts: [
+                    "Déploiement en production fluide et sécurisé.",
+                    "Auditabilité continuous et automatique des règles du SI.",
+                    "Responsabilisation des équipes de dev."
+                ],
+                pros: ["Rapidité d'exécution", "Zéro erreur humaine", "Conformité à l'échelle"],
+                cons: [
+                    "Temps et expertise requis pour écrire et maintenir les règles de politiques.",
+                    "Risque de faux positifs bloquant inutilement les déploiements urgents.",
+                    "Nécessite une conduite du changement auprès des équipes de risque/conformité."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="45" width="80" height="30" rx="4" fill="#0284c7"/>
+                    <text x="70" y="63" font-size="10" fill="#fff" text-anchor="middle">Git Push / Code</text>
+                    <path d="M110 60 L180 60" stroke="#38bdf8" stroke-width="2"/>
+                    <polygon points="210,40 240,60 210,80 180,60" fill="#f59e0b" stroke="#d97706"/>
+                    <text x="210" y="63" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Policy Engine</text>
+                    <path d="M240 60 L310 60" stroke="#10b981" stroke-width="2"/>
+                    <rect x="310" y="45" width="70" height="30" rx="4" fill="#059669"/>
+                    <text x="345" y="63" font-size="10" fill="#fff" text-anchor="middle">Deploy Prod</text>
+                </svg>`
+            }
+        ];
+
+        /* APP STATE */
+        let activeCategory = 'ALL';
+        let searchQuery = '';
+        let activeTab = 'catalog';
+        let currentSelectedPattern = null;
+
+        const CATEGORIES = [
+            'ALL',
+            'Platform Strategy',
+            'Platform Engineering',
+            'Architecture & Integration',
+            'Gouvernance & Compliance'
+        ];
+
+        const COMPOSER_LAYERS = [
+            {
+                id: "developer-experience",
+                name: "1. Developer Experience & Portals",
+                desc: "Portails développeur self-service, CLI, Catalogue API, Golden Paths, Templates",
+                icon: "layout"
+            },
+            {
+                id: "control-plane",
+                name: "2. Platform Control Plane & Security",
+                desc: "Moteur de politiques, Identité/IAM, Compliance automatisée, Orchestration",
+                icon: "shield"
+            },
+            {
+                id: "integration-governance",
+                name: "3. Integration & Event Architecture",
+                desc: "API Gateways, Flux d'événements, Couche Anti-Corruption, Claim Check, Médiation",
+                icon: "git-fork"
+            },
+            {
+                id: "data-runtime",
+                name: "4. Data, Runtime & Execution Plane",
+                desc: "Runtimes Kubernetes/Cloud, Service Mesh, Plan de données haute performance",
+                icon: "server"
+            }
+        ];
+
+        let blueprintState = {
+            "developer-experience": [],
+            "control-plane": [],
+            "integration-governance": [],
+            "data-runtime": []
+        };
+
+        window.onload = function() {
+            initTheme();
+            lucide.createIcons();
+            renderCategoryFilters();
+            renderPatternsGrid();
+            renderElevatorView();
+            renderComposerToolbox();
+            renderBlueprintLayers();
+        };
+
+        /* CATEGORY FILTER RENDERING */
+        function renderCategoryFilters() {
+            const container = document.getElementById('category-filters');
+            if (!container) return;
+            container.innerHTML = '';
+
+            CATEGORIES.forEach(cat => {
+                const btn = document.createElement('button');
+                const isActive = activeCategory === cat;
+                btn.className = `px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                    isActive 
+                        ? 'bg-[#0f4c81] text-white shadow-sm font-semibold' 
+                        : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-slate-800'
+                }`;
+                btn.innerText = cat === 'ALL' ? 'Tous' : cat;
+                btn.onclick = () => {
+                    activeCategory = cat;
+                    renderCategoryFilters();
+                    renderPatternsGrid();
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function getFilteredPatterns() {
+            return PATTERNS_DATA.filter(p => {
+                const matchesCategory = activeCategory === 'ALL' || p.category === activeCategory;
+                const matchesSearch = !searchQuery || 
+                    p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.subtitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.problem.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.solution.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCategory && matchesSearch;
+            });
+        }
+
+        function renderPatternsGrid() {
+            const grid = document.getElementById('patterns-grid');
+            const items = getFilteredPatterns();
+            document.getElementById('pattern-count').innerText = `${items.length} pattern(s) affiché(s)`;
+
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-16 text-center text-slate-400 dark:text-slate-500">
+                        <i data-lucide="search-x" class="w-12 h-12 mx-auto mb-3 opacity-40"></i>
+                        <p class="text-sm font-medium">Aucun pattern ne correspond à votre recherche.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            items.forEach(pattern => {
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-5 flex flex-col justify-between transition-all duration-200 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-sky-500/5 group shadow-sm";
+
+                card.innerHTML = `
+                    <div>
+                        <!-- Diagram Area at Top -->
+                        <div class="mb-4 p-3 bg-white dark:bg-slate-950 rounded-xl border border-slate-100 dark:border-slate-800/80 flex items-center justify-center overflow-hidden h-36 group-hover:border-sky-500/30 transition-colors">
+                            <div class="w-full h-full flex items-center justify-center pointer-events-none transform group-hover:scale-105 transition-transform duration-300">
+                                ${pattern.diagramSvg || ''}
+                            </div>
+                        </div>
+
+                        <!-- Category Badge Pill -->
+                        <div class="mb-2">
+                            <span class="inline-block px-3 py-1 rounded-md bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-sky-300 font-bold text-[11px] tracking-wide">
+                                ${pattern.category}
+                            </span>
+                        </div>
+
+                        <!-- Card Title & Subtitle -->
+                        <h3 class="font-bold text-slate-900 dark:text-slate-100 text-lg sm:text-xl leading-snug group-hover:text-sky-700 dark:group-hover:text-sky-400 transition-colors cursor-pointer" onclick="openPatternModal('${pattern.id}')">
+                            ${pattern.title}
+                        </h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 mb-3 leading-relaxed">
+                            ${pattern.summary}
+                        </p>
+
+                        <!-- Problème Block -->
+                        <div class="bg-slate-50/80 dark:bg-slate-950/60 p-3 rounded-r-xl border-l-4 border-amber-500 my-2.5">
+                            <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xs flex items-center gap-1.5">
+                                Problème
+                            </h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+                                ${pattern.problem}
+                            </p>
+                        </div>
+
+                        <!-- Solution Block -->
+                        <div class="bg-slate-50/80 dark:bg-slate-950/60 p-3 rounded-r-xl border-l-4 border-emerald-500 my-2.5">
+                            <h4 class="font-bold text-slate-900 dark:text-slate-100 text-xs flex items-center gap-1.5">
+                                Solution
+                            </h4>
+                            <p class="text-xs text-slate-600 dark:text-slate-300 mt-1 line-clamp-2 leading-relaxed">
+                                ${pattern.solution}
+                            </p>
+                        </div>
+
+                        <!-- Tags Pills -->
+                        <div class="flex flex-wrap items-center gap-1.5 mt-3">
+                            <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-mono">#${pattern.complexity}</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-mono">#${pattern.id}</span>
+                            <span class="px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-mono">#Hohpe</span>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer Actions -->
+                    <div class="pt-4 mt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+                        <button onclick="copyPatternMarkdown('${pattern.id}')" class="text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 flex items-center gap-1 text-[11px] font-medium transition-colors">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copier MD
+                        </button>
+                        <button onclick="openPatternModal('${pattern.id}')" class="text-[#0f4c81] dark:text-sky-400 font-bold hover:underline flex items-center gap-1 text-[11px]">
+                            Fiche officielle <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        /* Copy pattern details in Markdown */
+        function copyPatternMarkdown(patternId) {
+            const pattern = PATTERNS_DATA.find(p => p.id === patternId);
+            if (!pattern) return;
+
+            const md = `### ${pattern.title} (${pattern.subtitle})\n**Domaine :** ${pattern.category}\n**Problème :** ${pattern.problem}\n**Solution :** ${pattern.solution}\n**Source Hohpe :** ${pattern.hohpeSource}`;
+
+            navigator.clipboard.writeText(md).then(() => {
+                const toast = document.createElement('div');
+                toast.className = "fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2.5 rounded-xl text-xs font-medium shadow-2xl z-50 flex items-center gap-2";
+                toast.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i> Fiche Markdown copiée !`;
+                document.body.appendChild(toast);
+                lucide.createIcons();
+                setTimeout(() => toast.remove(), 2500);
+            });
+        }
+
+        function filterPatterns() {
+            const searchInput = document.getElementById('global-search');
+            if (searchInput) {
+                searchQuery = searchInput.value.trim();
+            }
+            renderPatternsGrid();
+        }
+
+        /* THEME MANAGEMENT */
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            htmlEl.classList.toggle('dark');
+            const isDark = htmlEl.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            lucide.createIcons();
+        }
+
+        /* TAB SWITCHING */
+        function switchTab(tabId) {
+            activeTab = tabId;
+            
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-600', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-sky-600', 'text-white', 'shadow-md');
+                activeBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+            }
+
+            document.querySelectorAll('.mob-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-600', 'text-white');
+                btn.classList.add('text-slate-600', 'dark:text-slate-400');
+            });
+
+            const activeMobBtn = document.getElementById(`mob-tab-${tabId}`);
+            if (activeMobBtn) {
+                activeMobBtn.classList.add('bg-sky-600', 'text-white');
+                activeMobBtn.classList.remove('text-slate-600', 'dark:text-slate-400');
+            }
+
+            document.getElementById('view-catalog').classList.add('hidden');
+            document.getElementById('view-elevator').classList.add('hidden');
+            document.getElementById('view-composer').classList.add('hidden');
+
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`view-${tabId}`).classList.add('flex');
+        }
+
+        function openPatternModal(patternId) {
+            const pattern = PATTERNS_DATA.find(p => p.id === patternId);
+            if (!pattern) return;
+
+            currentSelectedPattern = pattern;
+
+            document.getElementById('modal-badges').innerHTML = `
+                <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/30">
+                    ${pattern.category}
+                </span>
+                <span class="text-xs font-mono px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                    ${pattern.complexity}
+                </span>
+            `;
+
+            document.getElementById('modal-title').innerText = pattern.title;
+            document.getElementById('modal-subtitle').innerText = pattern.subtitle;
+            document.getElementById('modal-hohpe-quote').innerText = `"${pattern.hohpeQuote}"`;
+            document.getElementById('modal-hohpe-source').innerText = `— Greg Hohpe (${pattern.hohpeSource})`;
+            
+            /* Populate Problem, Solution & Negative Effects */
+            document.getElementById('modal-problem').innerText = pattern.problem;
+            document.getElementById('modal-solution').innerText = pattern.solution;
+
+            const negEffectsList = document.getElementById('modal-negative-effects');
+            if (negEffectsList) {
+                negEffectsList.innerHTML = pattern.cons.map(con => `<li>${con}</li>`).join('');
+            }
+
+            document.getElementById('modal-diagram').innerHTML = pattern.diagramSvg || '';
+
+            const impactList = document.getElementById('modal-impact');
+            impactList.innerHTML = pattern.impacts.map(imp => `<li class="flex items-start gap-2"><i data-lucide="check" class="w-4 h-4 text-sky-500 shrink-0 mt-0.5"></i> <span>${imp}</span></li>`).join('');
+
+            const prosList = document.getElementById('modal-pros');
+            prosList.innerHTML = pattern.pros.map(pro => `<li>${pro}</li>`).join('');
+
+            document.getElementById('pattern-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closePatternModal() {
+            document.getElementById('pattern-modal').classList.add('hidden');
+            currentSelectedPattern = null;
+        }
+
+        /* RENDER ELEVATOR MATRIX */
+        function renderElevatorView() {
+            const container = document.getElementById('elevator-floors');
+            const floors = [
+                {
+                    level: "Penthouse",
+                    title: "Business Strategy & Platform Value",
+                    desc: "Vision stratégique, réduction du time-to-market, modèles de plateforme (Thin vs Thick, Fruit Salad, Float vs Sink) et ROI.",
+                    cats: ["Platform Strategy"]
+                },
+                {
+                    level: "Étage Intermédiaire",
+                    title: "Organization & Developer Experience (DX)",
+                    desc: "Culture du 'Platform as a Product', Golden Paths, auto-service et réduction des illusions.",
+                    cats: ["Platform Engineering", "Gouvernance & Compliance"]
+                },
+                {
+                    level: "Étage Technique",
+                    title: "Software Architecture & Integration Patterns",
+                    desc: "Découplage des services, Smart Endpoints/Dumb Pipes, Figuier Étrangleur, Grim Wrapper et Anti-Corruption Layers.",
+                    cats: ["Architecture & Integration"]
+                },
+                {
+                    level: "Sous-Sol (Basement)",
+                    title: "Infrastructure, Cloud & Control Plane",
+                    desc: "Automation des pipelines, Control Plane vs Data Plane, conteneurisation et primitives de sécurité infra.",
+                    cats: ["Platform Engineering"]
+                }
+            ];
+
+            container.innerHTML = '';
+
+            floors.forEach((floor, idx) => {
+                const floorPatterns = PATTERNS_DATA.filter(p => floor.cats.includes(p.category));
+
+                const item = document.createElement('div');
+                item.className = "relative pl-6";
+                item.innerHTML = `
+                    <div class="absolute -left-[41px] top-0 w-6 h-6 rounded-full bg-white dark:bg-slate-900 border-2 border-sky-500 text-sky-600 dark:text-sky-400 flex items-center justify-center font-bold text-xs shadow-sm">
+                        ${4 - idx}
+                    </div>
+                    <div class="bg-white dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-base text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                                <span class="text-sky-600 dark:text-sky-400">${floor.level}</span> — ${floor.title}
+                            </h3>
+                            <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">${floorPatterns.length} pattern(s)</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">${floor.desc}</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            ${floorPatterns.map(p => `
+                                <div onclick="openPatternModal('${p.id}')" class="p-3 bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 hover:border-sky-500/50 rounded-lg cursor-pointer transition-colors flex items-start gap-2.5">
+                                    <i data-lucide="${p.icon}" class="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5"></i>
+                                    <div>
+                                        <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200">${p.title}</h4>
+                                        <p class="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-1">${p.subtitle}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        /* COMPOSER TOOLBOX & LAYERS */
+        function renderComposerToolbox() {
+            const container = document.getElementById('composer-toolbox');
+            container.innerHTML = '';
+
+            PATTERNS_DATA.forEach(p => {
+                const item = document.createElement('div');
+                item.className = "p-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-500/50 rounded-lg text-xs flex items-center justify-between group transition-colors shadow-sm";
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 overflow-hidden">
+                        <i data-lucide="${p.icon}" class="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0"></i>
+                        <span class="font-medium text-slate-800 dark:text-slate-200 truncate">${p.title}</span>
+                    </div>
+                    <button onclick="quickAddPattern('${p.id}')" class="p-1 hover:bg-sky-500/20 text-sky-600 dark:text-sky-400 rounded transition-colors shrink-0" title="Ajouter rapide">
+                        <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        function renderBlueprintLayers() {
+            const container = document.getElementById('blueprint-layers');
+            container.innerHTML = '';
+
+            COMPOSER_LAYERS.forEach(layer => {
+                const assignedPatterns = blueprintState[layer.id];
+
+                const layerEl = document.createElement('div');
+                layerEl.className = "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 transition-all shadow-sm";
+                layerEl.innerHTML = `
+                    <div class="flex items-center justify-between mb-3 border-b border-slate-100 dark:border-slate-800/60 pb-2">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="${layer.icon}" class="w-4 h-4 text-sky-600 dark:text-sky-400"></i>
+                            <div>
+                                <h3 class="text-xs font-bold text-slate-900 dark:text-slate-200 uppercase tracking-wide">${layer.name}</h3>
+                                <p class="text-[10px] text-slate-500 dark:text-slate-400">${layer.desc}</p>
+                            </div>
+                        </div>
+                        <span class="text-[10px] px-2 py-0.5 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full text-slate-600 dark:text-slate-400 font-mono">
+                            ${assignedPatterns.length} pattern(s)
+                        </span>
+                    </div>
+
+                    <div class="min-h-[64px] rounded-lg border border-dashed border-slate-300 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/40 p-2 flex flex-wrap gap-2 items-center" id="layer-drop-${layer.id}">
+                        ${assignedPatterns.length === 0 ? `
+                            <span class="text-xs text-slate-400 dark:text-slate-500 italic mx-auto">Aucun pattern assigné à cette couche architecture. Cliquez sur '+' dans la boîte à outils.</span>
+                        ` : assignedPatterns.map(pId => {
+                            const p = PATTERNS_DATA.find(x => x.id === pId);
+                            return `
+                                <div class="bg-sky-50 dark:bg-sky-950/80 border border-sky-300 dark:border-sky-500/40 rounded-lg px-3 py-1.5 flex items-center gap-2 text-xs text-sky-900 dark:text-sky-200">
+                                    <i data-lucide="${p.icon}" class="w-3.5 h-3.5 text-sky-600 dark:text-sky-400"></i>
+                                    <span class="font-medium">${p.title}</span>
+                                    <button onclick="removeFromBlueprint('${layer.id}', '${p.id}')" class="text-slate-400 hover:text-rose-500 transition-colors ml-1">
+                                        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                container.appendChild(layerEl);
+            });
+            lucide.createIcons();
+        }
+
+        function quickAddPattern(patternId) {
+            const pattern = PATTERNS_DATA.find(p => p.id === patternId);
+            if (!pattern) return;
+
+            let targetLayer = "integration-governance";
+            if (pattern.category === "Platform Strategy") targetLayer = "developer-experience";
+            if (pattern.category === "Platform Engineering") targetLayer = "control-plane";
+            if (pattern.category === "Gouvernance & Compliance") targetLayer = "control-plane";
+
+            if (!blueprintState[targetLayer].includes(patternId)) {
+                blueprintState[targetLayer].push(patternId);
+                renderBlueprintLayers();
+            }
+        }
+
+        function addCurrentPatternToBlueprint() {
+            if (currentSelectedPattern) {
+                quickAddPattern(currentSelectedPattern.id);
+                closePatternModal();
+                switchTab('composer');
+            }
+        }
+
+        function removeFromBlueprint(layerId, patternId) {
+            blueprintState[layerId] = blueprintState[layerId].filter(id => id !== patternId);
+            renderBlueprintLayers();
+        }
+
+        function clearBlueprint() {
+            blueprintState = {
+                "developer-experience": [],
+                "control-plane": [],
+                "integration-governance": [],
+                "data-runtime": []
+            };
+            renderBlueprintLayers();
+        }
+
+        /* EXPORT REPORT GENERATION */
+        function openExportModal() {
+            const modal = document.getElementById('export-modal');
+            const textarea = document.getElementById('export-text');
+
+            let markdown = `# Blueprint d'Architecture Platform SI - Synthèse Stratégique\n`;
+            markdown += `*Généré par Platform Pattern Catalog*\n\n`;
+
+            COMPOSER_LAYERS.forEach(layer => {
+                markdown += `## ${layer.name}\n`;
+                const patterns = blueprintState[layer.id];
+                if (patterns.length === 0) {
+                    markdown += `*Aucun pattern configuré*\n\n`;
+                } else {
+                    patterns.forEach(pId => {
+                        const p = PATTERNS_DATA.find(x => x.id === pId);
+                        markdown += `- **${p.title}** (${p.subtitle}): ${p.summary}\n`;
+                        markdown += `  *Source Hohpe:* ${p.hohpeSource}\n`;
+                    });
+                    markdown += `\n`;
+                }
+            });
+
+            markdown += `---\n### Principes directeurs de l'Ascenseur de l'Architecte :\n`;
+            markdown += `1. **Platform as a Product :** Réduction continue de la charge cognitive.\n`;
+            markdown += `2. **Gouvernance par le Code :** Garde-fous automatisés dans le CI/CD.\n`;
+
+            textarea.value = markdown;
+            modal.classList.remove('hidden');
+        }
+
+        function closeExportModal() {
+            document.getElementById('export-modal').classList.add('hidden');
+        }
+
+        function copyExportToClipboard() {
+            const textarea = document.getElementById('export-text');
+            textarea.select();
+            document.execCommand('copy');
+            alert("Rapport d'architecture copié dans le presse-papier !");
+        }
+
+        function exportBlueprintMarkdown() {
+            openExportModal();
+        }
+    </script>
+</body>
+</html>
