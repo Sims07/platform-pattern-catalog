@@ -58,7 +58,7 @@
 </head>
 <body class="h-full flex flex-col font-sans antialiased bg-slate-100/90 dark:bg-slate-950 text-slate-900 dark:text-slate-100 overflow-hidden transition-colors duration-200">
 
-    <!-- Header bar styled like screenshot: dark navy background -->
+    <!-- Header bar -->
     <header class="h-auto min-h-[4rem] bg-[#0b172a] border-b border-slate-800 px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3 z-20 shrink-0 shadow-md">
         <div class="flex items-center gap-3">
             <div class="px-2.5 py-1 bg-sky-600 text-white text-xs font-bold rounded-lg tracking-wider uppercase shadow-sm">
@@ -68,7 +68,7 @@
                 <h1 class="font-bold text-base sm:text-lg text-white tracking-wide flex items-center gap-2">
                     Platform Pattern Catalog
                 </h1>
-                <p class="text-[11px] sm:text-xs text-slate-400">Catalogue complet des patterns d'architecture SI & stratégie plateforme</p>
+                <p class="text-[11px] sm:text-xs text-slate-400">Catalogue complet des patterns d'architecture SI & stratégie plateforme (Gregor Hohpe)</p>
             </div>
         </div>
 
@@ -89,7 +89,7 @@
         <div class="flex items-center gap-2 sm:gap-3 ml-auto lg:ml-0">
             <div class="relative">
                 <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
-                <input type="text" id="global-search" oninput="filterPatterns()" placeholder="Rechercher un pattern, tag, concept..." 
+                <input type="text" id="global-search" oninput="filterPatterns()" placeholder="Rechercher un pattern, type, concept..." 
                     class="w-44 sm:w-64 lg:w-80 pl-9 pr-3 py-1.5 bg-slate-900/90 border border-slate-700/80 rounded-lg text-xs sm:text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all">
             </div>
 
@@ -121,7 +121,7 @@
     <main class="flex-1 overflow-hidden relative flex flex-col">
         <!-- VIEW 1: PATTERN CATALOG -->
         <div id="view-catalog" class="flex-1 overflow-y-auto p-4 sm:p-6 custom-scrollbar flex flex-col gap-5">
-            <!-- Filter Pills Bar matching screenshot style -->
+            <!-- Filter Pills Bar -->
             <div class="flex flex-wrap items-center justify-between gap-3 bg-white/70 dark:bg-slate-900/60 p-2 sm:p-2.5 rounded-full border border-slate-200/80 dark:border-slate-800 shadow-sm backdrop-blur">
                 <div id="category-filters" class="flex flex-wrap items-center gap-1.5">
                     <!-- Dynamic category pills -->
@@ -187,6 +187,7 @@
         </div>
     </main>
 
+    <!-- Modal Fiche Pattern Detaillee -->
     <div id="pattern-modal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-3 sm:p-6 transition-opacity">
         <div class="w-full max-w-2xl max-h-[90vh] bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-200">
             <!-- Modal Header -->
@@ -209,7 +210,7 @@
                         <i data-lucide="quote" class="w-5 h-5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5"></i>
                         <div>
                             <p class="text-xs sm:text-sm italic text-slate-700 dark:text-slate-200 leading-relaxed" id="modal-hohpe-quote">"Quote content..."</p>
-                            <span class="text-xs font-semibold text-sky-600 dark:text-sky-400 mt-2 block" id="modal-hohpe-source">— Greg Hohpe</span>
+                            <span class="text-xs font-semibold text-sky-600 dark:text-sky-400 mt-2 block" id="modal-hohpe-source">— Gregor Hohpe</span>
                         </div>
                     </div>
                 </div>
@@ -277,6 +278,7 @@
         </div>
     </div>
 
+    <!-- Export Modal -->
     <div id="export-modal" class="fixed inset-0 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative">
             <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-4 mb-4">
@@ -299,8 +301,295 @@
     </div>
 
     <script>
-        /* PATTERNS DATASET */
+        /* ENRICHED PATTERNS DATASET (INCLUDES THE FAB FOUR & KEY STRATEGIC MENTAL MODELS) */
         const PATTERNS_DATA = [
+            /* 1. TYPOLOGY: THE FAB FOUR PLATFORMS */
+            {
+                id: "fab-four-platforms",
+                title: "Les 4 Typologies de Plateformes (Fab Four)",
+                subtitle: "The Fab Four of Technology Platforms",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy (Part I: Understanding Platforms)",
+                elevatorFloor: "Penthouse <-> Étage Technique",
+                complexity: "Fondamental",
+                icon: "layers",
+                summary: "Les plateformes se classent en 4 grands niveaux : Infrastructure Cloud, Developer Platform (IDP), Business Capabilities, et Application/SaaS Platforms.",
+                hohpeQuote: "Le terme 'plateforme' est surchargé. Pour construire une stratégie claire, il faut distinguer la plateforme d'infrastructure, la plateforme développeur (IDP), les plateformes de capacités métier et les plateformes applicatives SaaS.",
+                problem: "Confondre une plateforme d'infrastructure Cloud (AWS/K8s) avec une plateforme développeur (IDP) ou une plateforme métier (Paiement/Identity). Cette ambiguïté crée des attentes irréalistes et un mauvais alignement des équipes.",
+                solution: "Etablir une cartographie claire distinguant : 1. Infrastructure/Cloud Platforms (économie d'échelle), 2. Internal Developer Platforms (réduction charge cognitive DX), 3. Business Capability Platforms (briques métier réutilisables), 4. Application/SaaS Platforms (Low-Code/SaaS).",
+                impacts: [
+                    "Clarification des rôles et responsabilité des équipes plateforme.",
+                    "Définition précise des indicateurs de valeur (ROI Cloud vs DX vs Métier).",
+                    "Élimination des quiproquos entre directions d'architecture et comités exécutifs."
+                ],
+                pros: ["Typologie claire", "Alignement stratégique", "Découplage des niveaux de responsabilité"],
+                cons: [
+                    "Exige une pédagogie continue auprès de la direction non technique.",
+                    "Les frontières entre niveaux peuvent être poreuses si l'architecture évolue vite."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="20" y="8" width="360" height="22" rx="4" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="200" y="23" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">4. Application / SaaS Platforms (Low-Code/CRM)</text>
+                    <rect x="20" y="35" width="360" height="22" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+                    <text x="200" y="50" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">3. Business Capability Platforms (Payments, IAM, Billing)</text>
+                    <rect x="20" y="62" width="360" height="22" rx="4" fill="#075985" stroke="#38bdf8"/>
+                    <text x="200" y="77" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">2. Internal Developer Platforms (IDP, Portals, Golden Paths)</text>
+                    <rect x="20" y="89" width="360" height="22" rx="4" fill="#0f172a" stroke="#475569"/>
+                    <text x="200" y="104" font-size="9" fill="#94a3b8" text-anchor="middle">1. Cloud & Infrastructure Platforms (Compute, K8s, IaaS)</text>
+                </svg>`
+            },
+            /* 2. THIN VS THICK PLATFORMS */
+            {
+                id: "thin-vs-thick-platform",
+                title: "Plateforme Fine vs Dense (Thin vs Thick)",
+                subtitle: "Thin Platform vs Thick Platform Strategy",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy (Part III: In-House Platforms)",
+                elevatorFloor: "Penthouse / Strategy",
+                complexity: "Intermédiaire",
+                icon: "sliders",
+                summary: "Viser la taille minimale efficace (Thin Platform) en consommant le maximum de services managés pour limiter la charge d'entretien.",
+                hohpeQuote: "Une plateforme dense (Thick Platform) veut tout réinventer en interne. Une plateforme fine (Thin Platform) compose les meilleurs services du marché et se concentre uniquement sur le liant spécifique de l'entreprise.",
+                problem: "Construire une usine à gaz technique interne ('Thick Platform') qui réinvente des gestionnaires de secret, des orchestrateurs et des bases de données. L'équipe passe 90% de son temps à maintenir l'infra au lieu d'accélérer les devs.",
+                solution: "Adopter la posture 'Thin Platform' : s'appuyer au maximum sur les services managés Cloud / SaaS du marché et concentrer l'ingénierie interne uniquement sur la glue, la gouvernance et le contexte métier spécifique.",
+                impacts: [
+                    "Réduction massive de la charge de maintenance de l'équipe plateforme.",
+                    "Time-to-market accéléré pour les fonctionnalités à valeur ajoutée.",
+                    "Capacité à pivoter sans dette technique d'infrastructure massive."
+                ],
+                pros: ["Coût d'ingénierie maîtrisé", "Focus sur la valeur différentiante", "Agilité maximale"],
+                cons: [
+                    "Dépendance accrue envers les fournisseurs Cloud / SaaS externes.",
+                    "Nécessite une discipline stricte pour refuser la réinvention de composants existants."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="20" width="150" height="80" rx="6" fill="#881337" stroke="#f43f5e"/>
+                    <text x="105" y="45" font-size="10" font-weight="bold" fill="#fecdd3" text-anchor="middle">Thick Platform</text>
+                    <text x="105" y="70" font-size="8" fill="#fda4af" text-anchor="middle">Massive internal code & overhead</text>
+                    <rect x="220" y="20" width="150" height="80" rx="6" fill="#065f46" stroke="#10b981"/>
+                    <text x="295" y="45" font-size="10" font-weight="bold" fill="#a7f3d0" text-anchor="middle">Thin Platform</text>
+                    <text x="295" y="70" font-size="8" fill="#6ee7b7" text-anchor="middle">Minimal glue over Managed Cloud</text>
+                </svg>`
+            },
+            /* 3. CANTILEVERED PLATFORM */
+            {
+                id: "cantilevered-platform",
+                title: "Plateforme en Porte-à-Faux (Cantilevered)",
+                subtitle: "Cantilevered Platforms",
+                category: "Architecture & Integration",
+                hohpeSource: "Platform Strategy (Part IV: Designing Platforms)",
+                elevatorFloor: "Étage Technique & Architecture",
+                complexity: "Avancé",
+                icon: "pie-chart",
+                summary: "Les plateformes horizontales s'appuient et tirent leur force de piliers verticaux d'expertise applicative ou métier.",
+                hohpeQuote: "Une plateforme n'a pas besoin de flotter dans le vide. Comme un balcon en porte-à-faux, une plateforme horizontale solide prend souvent ses racines dans une application verticale réussie.",
+                problem: "Tenter de concevoir une plateforme 100% abstraite et théorique depuis une tour d'ivoire, sans cas d'usage réel ni ancrage dans une application pilote en production.",
+                solution: "Construire la plateforme en porte-à-faux (Cantilevered) : extraire et généraliser les composants de plateforme à partir d'une première application phare réussie qui sert de pilier et de cobaye.",
+                impacts: [
+                    "Pertinence immédiate des fonctionnalités de plateforme.",
+                    "Validation en conditions réelles de production.",
+                    "Réduction des abstractions stériles ou inutiles."
+                ],
+                pros: ["Ancrage dans la réalité opérationnelle", "Adoption pilote garantie", "Pragmatisme"],
+                cons: [
+                    "Risque de coupler initialement la plateforme aux spécificités de l'application pilote.",
+                    "Nécessite une phase de généralisation prudente pour accueillir les tenants suivants."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="40" y="60" width="60" height="50" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="70" y="90" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Pillar App</text>
+                    <rect x="40" y="30" width="300" height="25" rx="4" fill="#0369a1" stroke="#38bdf8"/>
+                    <text x="190" y="47" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">Horizontal Platform (Cantilevered Extension)</text>
+                </svg>`
+            },
+            /* 4. THE 7 C's OF PLATFORM QUALITY */
+            {
+                id: "seven-cs-quality",
+                title: "Les 7 'C' de la Qualité de Plateforme",
+                subtitle: "The 7 'C's of Platform Quality",
+                category: "Platform Engineering",
+                hohpeSource: "Platform Strategy (Part IV: Designing Platforms)",
+                elevatorFloor: "Étage Intermédiaire / DX",
+                complexity: "Intermédiaire",
+                icon: "shield",
+                summary: "Les 7 critères cardinaux pour évaluer la maturité d'une plateforme : Capability, Convenience, Context, Consistency, Compliance, Cost, Community.",
+                hohpeQuote: "Une plateforme ne s'évalue pas seulement sur ses fonctionnalités (Capabilities). Elle se juge sur sa commodité (Convenience), son contexte partagé et la communauté qu'elle rassemble.",
+                problem: "Mesurer le succès d'une plateforme uniquement sur la liste de ses fonctionnalités techniques sans prendre en compte la friction utilisateur, le coût global, ou la communauté interne.",
+                solution: "Utiliser la grille des 7 'C' : Capability (Fonctionnalités), Convenience (Faible friction), Context (Partage d'état/SSO), Consistency (Homogénéité), Compliance (Garde-fous), Cost (Transparence financière), Community (Co-construction).",
+                impacts: [
+                    "Évaluation à 360° de la valeur réelle de la plateforme.",
+                    "Détection rapide des goulots de friction pour les développeurs.",
+                    "Inspiration pour le produit de plateforme interne."
+                ],
+                pros: ["Grille d'analyse complète", "Centré sur l'expérience développeur", "Équilibre entre technique et humain"],
+                cons: [
+                    "Demande des mesures qualitatives (sondages DX, NPS) en plus des métriques techniques."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <circle cx="200" cy="60" r="45" fill="#0369a1" fill-opacity="0.2" stroke="#38bdf8"/>
+                    <text x="200" y="64" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">7 'C's Quality</text>
+                    <text x="90" y="35" font-size="9" font-weight="bold" fill="#38bdf8">Capability • Convenience • Context</text>
+                    <text x="90" y="95" font-size="9" font-weight="bold" fill="#10b981">Consistency • Compliance • Cost • Community</text>
+                </svg>`
+            },
+            /* 5. PLATFORM EVOLUTION IS A CUBE */
+            {
+                id: "platform-evolution-cube",
+                title: "L'Évolution de Plateforme en Cube",
+                subtitle: "Platform Evolution Is a Cube",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy (Part VI: Growing Platforms)",
+                elevatorFloor: "Penthouse / Strategy",
+                complexity: "Avancé",
+                icon: "box",
+                summary: "La croissance d'une plateforme se mesure dans un espace à 3 dimensions : Étendue des Fonctionnalités, Profondeur d'Adoption et Portée Métier.",
+                hohpeQuote: "Les plateformes ne grandissent pas de façon linéaire. Leur évolution ressemble à un cube qui se développe simultanément sur la profondeur technique, la couverture métier et le taux d'adoption.",
+                problem: "Penser la roadmap d'une plateforme de façon unidimensionnelle (ajouter toujours plus de fonctionnalités) sans mesurer si ces fonctionnalités sont réellement adoptées à l'échelle.",
+                solution: "Piloter la trajectoire de la plateforme sur 3 axes : Axis X (Nombre de services/capacités), Axis Y (Profondeur d'intégration chez les tenants), Axis Z (Nombre de squads et domaines métier consommateurs).",
+                impacts: [
+                    "Pilotage équilibré entre innovation et adoption réelle.",
+                    "Prévention du gaspillage sur des fonctionnalités non adoptées.",
+                    "Capacité à fixer des objectifs de plateforme clairs et quantifiables."
+                ],
+                pros: ["Vision 3D de la maturité", "Focus sur l'usage réel", "Stratégie d'extension maîtrisée"],
+                cons: [
+                    "Necessite de collecter des télémétries fines sur l'usage réel de chaque module."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <path d="M150 90 L250 90 L290 50 L190 50 Z" fill="#0284c7" fill-opacity="0.4" stroke="#38bdf8"/>
+                    <path d="M150 90 L150 40 L250 40 L250 90 Z" fill="#0369a1" fill-opacity="0.6" stroke="#38bdf8"/>
+                    <path d="M250 90 L290 50 L290 10 L250 40 Z" fill="#075985" fill-opacity="0.8" stroke="#38bdf8"/>
+                    <text x="200" y="70" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Platform Evolution Cube</text>
+                </svg>`
+            },
+            /* 6. INDIRECT VALUE CREATION */
+            {
+                id: "indirect-value-creation",
+                title: "Création de Valeur Indirecte",
+                subtitle: "Platforms Are Indirect Value Creators",
+                category: "Platform Strategy",
+                hohpeSource: "Platform Strategy / Software Architect Elevator",
+                elevatorFloor: "Penthouse / Strategy",
+                complexity: "Intermédiaire",
+                icon: "trending-up",
+                summary: "Une plateforme ne crée aucune valeur directe par elle-même : sa valeur est le multiplicateur de la vitesse et des produits de ses consommateurs.",
+                hohpeQuote: "La plus belle plateforme du monde qui n'héberge aucune application a une valeur exactement égale à zéro. La plateforme est un multiplicateur de force, pas un produit autonome.",
+                problem: "Considérer la plateforme comme un centre de profit autonome et chercher à mesurer son succès sur ses propres métriques internes (ex: nombre de clusters K8s déployés) au lieu de la vitesse des produits métier.",
+                solution: "Évaluer la valeur de la plateforme à travers le succès de ses clients internes : Time-to-Market réduit des features métier, baisse du taux de bugs en prod, et satisfaction développeur (NPS).",
+                impacts: [
+                    "Alignement total de l'équipe plateforme sur les enjeux des équipes produit.",
+                    "Suppression des métriques de vanité au profit de la valeur métier.",
+                    "Culture de service et de facilitation."
+                ],
+                pros: ["Orientation client absolue", "Justification claire du ROI", "Pas de projet pour le projet"],
+                cons: [
+                    "Difficulté d'isoler la contribution exacte de la plateforme dans le succès d'un produit métier."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="40" width="100" height="40" rx="6" fill="#0f172a" stroke="#475569"/>
+                    <text x="80" y="63" font-size="10" fill="#94a3b8" text-anchor="middle">Platform Core</text>
+                    <text x="160" y="65" font-size="16" font-weight="bold" fill="#f59e0b">x 5</text>
+                    <rect x="220" y="25" width="150" height="70" rx="6" fill="#059669" stroke="#10b981"/>
+                    <text x="295" y="55" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">Business Products Value</text>
+                    <text x="295" y="72" font-size="8" fill="#a7f3d0" text-anchor="middle">Velocity & Quality Multiplied</text>
+                </svg>`
+            },
+            /* 7. TIERING AND SLICING */
+            {
+                id: "tiering-and-slicing",
+                title: "Segmentation & Niveaux de Service (Tiering)",
+                subtitle: "Tiering and Slicing",
+                category: "Platform Engineering",
+                hohpeSource: "Platform Strategy (Part VI: Growing Platforms)",
+                elevatorFloor: "Étage Intermédiaire / Operations",
+                complexity: "Intermédiaire",
+                icon: "server",
+                summary: "Proposer des niveaux de service différenciés (Core, Gold, Custom) plutôt que d'imposer un modèle unique rigide 'One Size Fits All'.",
+                hohpeQuote: "Une plateforme unique pour tous finit par ne convenir à personne. Il faut découper l'offre de plateforme en tranches et niveaux de service adaptés à la criticité.",
+                problem: "Imposer les mêmes exigences maximales (SLA 99.99%, PRA multi-région, audit de conformité lourd) à un outil interne secondaire qu'au cœur bancaire stratégique.",
+                solution: "Définir des tiers de plateforme clairs (ex: Tier 1 Gold avec haute disponibilité active-active / Tier 2 Silver standard / Tier 3 Sandbox) avec des coûts et garde-fous adaptés.",
+                impacts: [
+                    "Optimisation des coûts d'infrastructure et d'exploitation.",
+                    "Mise à disposition rapide d'environnements légers pour l'expérimentation.",
+                    "Gestion transparente des exigences de SLA."
+                ],
+                pros: ["Flexibilité d'usage", "Économies substantielles", "Niveaux de service adaptés"],
+                cons: [
+                    "Complexité de maintenance pour l'équipe plateforme qui gère plusieurs profils d'infra."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="20" width="340" height="25" rx="4" fill="#d97706"/><text x="200" y="37" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Gold Tier: Multi-Region, 99.99% SLA, Instant Failover</text>
+                    <rect x="30" y="50" width="340" height="25" rx="4" fill="#0284c7"/><text x="200" y="67" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Silver Tier: Standard Multi-AZ, Managed Backups</text>
+                    <rect x="30" y="80" width="340" height="25" rx="4" fill="#475569"/><text x="200" y="97" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Bronze / Sandbox Tier: Single Instance, Low Cost</text>
+                </svg>`
+            },
+            /* 8. TENANCY AND OWNERSHIP */
+            {
+                id: "tenancy-and-ownership",
+                title: "Modèles de Tenancy & Propriété",
+                subtitle: "Ownership and Tenancy Models",
+                category: "Architecture & Integration",
+                hohpeSource: "Platform Strategy (Part V: Implementing Platforms)",
+                elevatorFloor: "Étage Technique & Cloud",
+                complexity: "Avancé",
+                icon: "database",
+                summary: "Définir le mode d'hébergement et d'isolation des ressources : Appartements équipés (Serviced), Location (Leasing) ou Vente nue.",
+                hohpeQuote: "Êtes-vous en train de vendre du terrain nu, de louer des locaux bruts, ou d'offrir des appartements entièrement meublés et servis ? Le modèle d'isolation change tout.",
+                problem: "Imprécision dans la répartition des rôles de maintenance : qui gère les montées de version de la base de données, la rotation des secrets et la sauvegarde des données des tenants ?",
+                solution: "Formaliser le contrat de tenancy : Multi-tenant partagé (Appartement meublé), Single-tenant dédié managé (Leasing) ou Compte dédié autonome (Terrain nu) selon la sensibilité des données.",
+                impacts: [
+                    "Champs de responsabilité (RACI) limpides entre Platform & App teams.",
+                    "Isolation de sécurité adaptée aux exigences réglementaires.",
+                    "Facturation interne et allocation des coûts fluides."
+                ],
+                pros: ["Contrat de service explicite", "Sécurité maîtrisée", "Prévention du 'No Man's Land' operational"],
+                cons: [
+                    "Gestion plus complexe du cycle de vie des briques mutualisées."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="25" width="100" height="70" rx="6" fill="#0f172a" stroke="#475569"/>
+                    <text x="80" y="55" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Shared Multi-Tenant</text>
+                    <text x="80" y="70" font-size="8" fill="#94a3b8" text-anchor="middle">(Serviced Apartment)</text>
+                    <rect x="150" y="25" width="100" height="70" rx="6" fill="#0369a1" stroke="#38bdf8"/>
+                    <text x="200" y="55" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Dedicated Instance</text>
+                    <text x="200" y="70" font-size="8" fill="#7dd3fc" text-anchor="middle">(Leased Space)</text>
+                    <rect x="270" y="25" width="100" height="70" rx="6" fill="#059669" stroke="#10b981"/>
+                    <text x="320" y="55" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Raw Account</text>
+                    <text x="320" y="70" font-size="8" fill="#a7f3d0" text-anchor="middle">(Bare Land)</text>
+                </svg>`
+            },
+            /* 9. OPINIONATED WITH ESCAPE HATCHES */
+            {
+                id: "opinionated-mind-of-own",
+                title: "Engagé mais Ouvert (Escape Hatches)",
+                subtitle: "Opinionated with a Mind of Your Own",
+                category: "Gouvernance & Compliance",
+                hohpeSource: "Platform Strategy (Part III: In-House Platforms)",
+                elevatorFloor: "Gouvernance & Compliance",
+                complexity: "Intermédiaire",
+                icon: "repeat",
+                summary: "Proposer des choix d'architecture très tranchés (Opinionated) tout en fournissant des sorties de secours (Escape Hatches) pour les cas d'urgence.",
+                hohpeQuote: "Nous aimons les plateformes engagées (opinionated) car elles évitent les questions répétitives. Mais nous détestons les prisons : il faut toujours prévoir des portes de sortie pour les besoins légitimes.",
+                problem: "Une plateforme trop rigide sans trappe d'échappement force les équipes à contourner le système en secret (Shadow IT) dès qu'un besoin non prévu se présente.",
+                solution: "Offrir un socle fortement 'opinionated' avec des choix pré-validés par défaut, mais inclure des mécanismes explicites pour déroger au standard (Break-Glass / Escape Hatches) sous condition d'auditabilité.",
+                impacts: [
+                    "Vitesse maximale pour 90% des cas standards.",
+                    "Absence de blocage critique pour les cas particuliers.",
+                    "Confiance renouvelée des développeurs envers la plateforme."
+                ],
+                pros: ["Standardisation efficace", "Gestion pragmatique des exceptions", "Transparence"],
+                cons: [
+                    "Processus de suivi requis pour s'assurer que les trappes de sortie restent temporaires."
+                ],
+                diagramSvg: `<svg class="w-full h-28 text-sky-400" viewBox="0 0 400 120" fill="none">
+                    <rect x="30" y="30" width="240" height="60" rx="6" fill="#0284c7" stroke="#38bdf8"/>
+                    <text x="150" y="62" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">Strong Opinionated Path (80% Default)</text>
+                    <path d="M270 60 L330 60 L330 90" stroke="#f59e0b" stroke-width="3" stroke-dasharray="3"/>
+                    <rect x="280" y="80" width="100" height="30" rx="4" fill="#d97706"/>
+                    <text x="330" y="98" font-size="9" font-weight="bold" fill="#fff" text-anchor="middle">Escape Hatch</text>
+                </svg>`
+            },
+            /* ORIGINAL PATTERNS CONTINUED */
             {
                 id: "fruit-salad-vs-basket",
                 title: "Salade de Fruits vs Panier de Fruits",
@@ -678,7 +967,7 @@
                 solution: "Exprimer les règles de sécurité, de conformité réglementaire et de coûts sous forme de règles de code (OPA, Checkov) exécutées automatiquement à chaque 'git push'.",
                 impacts: [
                     "Déploiement en production fluide et sécurisé.",
-                    "Auditabilité continuous et automatique des règles du SI.",
+                    "Auditabilité continue et automatique des règles du SI.",
                     "Responsabilisation des équipes de dev."
                 ],
                 pros: ["Rapidité d'exécution", "Zéro erreur humaine", "Conformité à l'échelle"],
@@ -730,7 +1019,7 @@
             {
                 id: "integration-governance",
                 name: "3. Integration & Event Architecture",
-                desc: "API Gateways, Flux d'événements, Couche Anti-Corruption, Claim Check, Médiation",
+                desc: "API Gateways, Flux d'événements, Couche Anti-Corruption, Cantilevered, Multi-tenancy",
                 icon: "git-fork"
             },
             {
@@ -1015,25 +1304,25 @@
                 {
                     level: "Penthouse",
                     title: "Business Strategy & Platform Value",
-                    desc: "Vision stratégique, réduction du time-to-market, modèles de plateforme (Thin vs Thick, Fruit Salad, Float vs Sink) et ROI.",
+                    desc: "Vision stratégique, Les 4 Types de Plateformes (Fab Four), Thin vs Thick, Valeur Indirecte, Float vs Sink et ROI.",
                     cats: ["Platform Strategy"]
                 },
                 {
                     level: "Étage Intermédiaire",
                     title: "Organization & Developer Experience (DX)",
-                    desc: "Culture du 'Platform as a Product', Golden Paths, auto-service et réduction des illusions.",
+                    desc: "Platform as a Product, Les 7 'C' de la Qualité, Golden Paths, Tiering & Slicing et réduction des illusions.",
                     cats: ["Platform Engineering", "Gouvernance & Compliance"]
                 },
                 {
                     level: "Étage Technique",
                     title: "Software Architecture & Integration Patterns",
-                    desc: "Découplage des services, Smart Endpoints/Dumb Pipes, Figuier Étrangleur, Grim Wrapper et Anti-Corruption Layers.",
+                    desc: "Plateformes en Porte-à-Faux (Cantilevered), Endpoints Intelligents, Tenancy & Propriété, Figuier Étrangleur et Anti-Corruption Layers.",
                     cats: ["Architecture & Integration"]
                 },
                 {
                     level: "Sous-Sol (Basement)",
                     title: "Infrastructure, Cloud & Control Plane",
-                    desc: "Automation des pipelines, Control Plane vs Data Plane, conteneurisation et primitives de sécurité infra.",
+                    desc: "Automation des pipelines, Infrastructure Cloud, Control Plane vs Data Plane et primitives de sécurité infra.",
                     cats: ["Platform Engineering"]
                 }
             ];
@@ -1151,6 +1440,7 @@
             if (pattern.category === "Platform Strategy") targetLayer = "developer-experience";
             if (pattern.category === "Platform Engineering") targetLayer = "control-plane";
             if (pattern.category === "Gouvernance & Compliance") targetLayer = "control-plane";
+            if (pattern.category === "Architecture & Integration") targetLayer = "integration-governance";
 
             if (!blueprintState[targetLayer].includes(patternId)) {
                 blueprintState[targetLayer].push(patternId);
